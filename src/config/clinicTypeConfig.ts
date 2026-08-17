@@ -3,8 +3,8 @@ import {
   UserCog, Package, BarChart3, Bell, Settings, GraduationCap, Microscope,
   ClipboardList, DollarSign, Wrench, MessageSquare, Star, Receipt, Shield,
   FileCheck, FolderOpen, Eye, Heart, Baby, Bone, Ear, Wallet, FileText,
-  PiggyBank, TrendingUp, Calculator, Bot, Clock, CalendarClock, Truck,
-  ShoppingCart, Link2, Brain, Globe,
+  PiggyBank, TrendingUp, Calculator, Clock, CalendarClock, Truck,
+  ShoppingCart, Link2, LineChart, Globe,
 } from "lucide-react";
 
 export interface NavItem {
@@ -97,7 +97,7 @@ const dentalNav: NavGroup[] = [
     label: "Reports",
     items: [
       { title: "Reports", path: "reports", icon: BarChart3 },
-      { title: "Advanced Analytics", path: "analytics", icon: Brain },
+      { title: "Advanced Analytics", path: "analytics", icon: LineChart },
     ],
   },
   {
@@ -116,7 +116,6 @@ const dentalNav: NavGroup[] = [
       { title: "Staff", path: "staff", icon: UserCog },
       { title: "Documents", path: "documents", icon: FolderOpen },
       { title: "Audit Log", path: "audit-log", icon: Shield },
-      { title: "Automation", path: "automation", icon: Bot },
       { title: "Website Settings", path: "website-settings", icon: Globe },
       { title: "Shop Management", path: "shop-management", icon: ShoppingCart },
     ],

@@ -6,7 +6,7 @@ import { AICopilotPanel } from "./AICopilotPanel";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigationType } from "react-router-dom";
-import { Bot, LayoutDashboard, Sparkles } from "lucide-react";
+import { Stethoscope, LayoutDashboard, ClipboardPlus } from "lucide-react";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -92,7 +92,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       className="absolute right-[25%] -translate-x-1/2 -top-10 pointer-events-none z-10"
                     >
                       <div className="relative flex items-center gap-1.5 bg-primary text-primary-foreground text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-lg shadow-primary/25">
-                        <Sparkles className="w-3 h-3" />
+                        <ClipboardPlus className="w-3 h-3" />
                         <span>Try AI</span>
                         {/* Caret */}
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rotate-45 rounded-[1px]" />
@@ -120,7 +120,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <Bot className="w-4 h-4" />
+                  <Stethoscope className="w-4 h-4" />
                   AI Chat
                   {/* Subtle pulse dot */}
                   {!aiOpen && (

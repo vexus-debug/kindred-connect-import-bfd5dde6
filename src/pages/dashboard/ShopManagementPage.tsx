@@ -24,6 +24,8 @@ import {
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "@/hooks/use-toast";
+import { ProductImageUploader } from "@/components/dashboard/ProductImageUploader";
+import { useOrg } from "@/hooks/useOrg";
 
 const productCategories = ["General", "Oral Care", "Whitening", "Orthodontics", "Accessories", "Medication"];
 const orderStatuses = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"];
@@ -45,6 +47,7 @@ export default function ShopManagementPage() {
   const { data: orders = [], isLoading: ordersLoading } = useShopOrders();
   const updateOrder = useUpdateShopOrder();
   const { data: revenue } = useShopRevenue();
+  const { currentOrg } = useOrg();
 
   const [addOpen, setAddOpen] = useState(false);
   const [editProduct, setEditProduct] = useState<ShopProduct | null>(null);
@@ -52,11 +55,13 @@ export default function ShopManagementPage() {
   const [form, setForm] = useState({
     name: "", description: "", price: "", compare_at_price: "", category: "General",
     image_url: "", stock: "0", sku: "", is_active: true, features: "",
+    images: [] as string[],
   });
 
   const resetForm = () => setForm({
     name: "", description: "", price: "", compare_at_price: "", category: "General",
     image_url: "", stock: "0", sku: "", is_active: true, features: "",
+    images: [] as string[],
   });
 
   const openEdit = (p: ShopProduct) => {
@@ -71,6 +76,7 @@ export default function ShopManagementPage() {
       sku: p.sku || "",
       is_active: p.is_active,
       features: (p.features || []).join("\n"),
+      images: p.images || [],
     });
     setEditProduct(p);
   };
@@ -86,8 +92,8 @@ export default function ShopManagementPage() {
       price: parseFloat(form.price),
       compare_at_price: form.compare_at_price ? parseFloat(form.compare_at_price) : null,
       category: form.category,
-      image_url: form.image_url || null,
-      images: [] as string[],
+      image_url: form.images[0] || form.image_url || null,
+      images: form.images,
       stock: parseInt(form.stock) || 0,
       sku: form.sku || null,
       is_active: form.is_active,
@@ -362,10 +368,18 @@ export default function ShopManagementPage() {
                 <Label className="text-xs">Stock Quantity</Label>
                 <Input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Image URL</Label>
-                <Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
-              </div>
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Product Images</Label>
+              <ProductImageUploader
+                orgId={currentOrg?.org_id}
+                images={form.images}
+                onChange={(images) => setForm({ ...form, images })}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Or paste an image URL</Label>
+              <Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
             </div>
             <div className="space-y-1">
               <Label className="text-xs">Features (one per line)</Label>

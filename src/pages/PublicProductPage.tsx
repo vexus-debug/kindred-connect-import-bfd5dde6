@@ -19,6 +19,7 @@ export default function PublicProductPage() {
   const { slug, productId } = useParams<{ slug: string; productId: string }>();
   const { data: product, isLoading } = usePublicShopProduct(productId);
   const [qty, setQty] = useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [ordered, setOrdered] = useState(false);
   const [ordering, setOrdering] = useState(false);
@@ -99,6 +100,11 @@ export default function PublicProductPage() {
     ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
     : 0;
 
+  const gallery = Array.from(
+    new Set([...(product.images || []), ...(product.image_url ? [product.image_url] : [])])
+  );
+  const activeImage = gallery[activeImageIndex] || gallery[0];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -117,8 +123,8 @@ export default function PublicProductPage() {
           {/* Product Image */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <div className="aspect-square rounded-2xl bg-gray-100 overflow-hidden relative">
-              {product.image_url ? (
-                <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+              {activeImage ? (
+                <img src={activeImage} alt={product.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Package className="h-20 w-20 text-gray-300" />
@@ -130,6 +136,25 @@ export default function PublicProductPage() {
                 </Badge>
               )}
             </div>
+
+            {gallery.length > 1 && (
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                {gallery.map((url, i) => (
+                  <button
+                    key={url}
+                    type="button"
+                    onClick={() => setActiveImageIndex(i)}
+                    aria-label={`View image ${i + 1} of ${gallery.length}`}
+                    className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
+                      i === activeImageIndex ? "" : "border-transparent"
+                    }`}
+                    style={i === activeImageIndex ? { borderColor: primaryColor } : undefined}
+                  >
+                    <img src={url} alt={`${product.name} view ${i + 1}`} className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* Product Details */}

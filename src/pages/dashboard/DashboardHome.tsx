@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
   Users, CalendarDays, CreditCard, TrendingUp, UserPlus, CalendarPlus, FileText,
-  Clock, Activity, ArrowUpRight, ArrowDownRight, Zap, ChevronRight, Sparkles,
+  Clock, Activity, ArrowUpRight, ArrowDownRight, Zap, ChevronRight, Stethoscope, CalendarCheck,
   CircleDot, BarChart3,
 } from "lucide-react";
 import {
@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import {
   useDashboardStats, useWeeklyAppointments, useRevenueData,
-  useTodaySchedule, useRecentActivity, useCurrentUserName,
+  useTodaySchedule, useRecentActivity, useCurrentUserName, useTreatmentDistribution,
 } from "@/hooks/useDashboardData";
 import { format } from "date-fns";
 import { useOrg } from "@/hooks/useOrg";
@@ -116,6 +116,7 @@ export default function DashboardHome() {
   const { data: todayAppointments } = useTodaySchedule();
   const { data: activities } = useRecentActivity();
   const { data: userName } = useCurrentUserName();
+  const { data: treatmentDist, isLoading: treatmentDistLoading } = useTreatmentDistribution();
   const { currentOrg, basePath } = useOrg();
   const orgRole = currentOrg?.role || "receptionist";
 
@@ -134,15 +135,6 @@ export default function DashboardHome() {
     canSeeBilling     && { to: `${basePath}/billing`,      icon: FileText,    title: "Create Invoice" },
   ].filter(Boolean) as any[];
 
-  /* Treatment distribution */
-  const treatmentPie = [
-    { name: "Check-up", value: 30, fill: "hsl(var(--primary))" },
-    { name: "Filling",  value: 22, fill: "hsl(var(--dental-teal-light))" },
-    { name: "Cleaning", value: 18, fill: "hsl(var(--gold))" },
-    { name: "Extraction", value: 14, fill: "hsl(var(--slate))" },
-    { name: "Other",    value: 16, fill: "hsl(var(--info))" },
-  ];
-
   return (
     <div className="space-y-5">
 
@@ -156,7 +148,7 @@ export default function DashboardHome() {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-primary to-dental-teal-light flex items-center justify-center shadow-md shadow-primary/20">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
+                <Stethoscope className="h-4 w-4 text-primary-foreground" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-foreground tracking-tight leading-tight">
@@ -366,11 +358,30 @@ export default function DashboardHome() {
                 </div>
               </CardHeader>
               <CardContent className="pt-0 space-y-3.5">
-                {treatmentPie.map((item) => (
+                {treatmentDistLoading ? (
+                  <div className="space-y-3.5">
+                    {[0, 1, 2, 3].map((i) => (
+                      <div key={i} className="space-y-1.5">
+                        <div className="h-3 w-24 bg-muted rounded animate-pulse" />
+                        <div className="h-2 w-full bg-muted rounded-full animate-pulse" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (treatmentDist || []).length === 0 ? (
+                  <div className="flex flex-col items-center gap-2 py-10 text-center">
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                      <BarChart3 className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <p className="text-sm text-muted-foreground">No treatment data yet</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      Distribution appears once appointments are linked to treatments.
+                    </p>
+                  </div>
+                ) : (treatmentDist || []).map((item) => (
                   <div key={item.name} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-medium text-foreground">{item.name}</span>
-                      <span className="font-bold text-foreground tabular-nums">{item.value}%</span>
+                      <span className="font-bold text-foreground tabular-nums">{item.value}% <span className="font-medium text-muted-foreground">({item.count})</span></span>
                     </div>
                     <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                       <motion.div
@@ -482,7 +493,7 @@ export default function DashboardHome() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Zap className="h-4 w-4 text-primary" />
+                      <CalendarCheck className="h-4 w-4 text-primary" />
                     </div>
                     <div>
                       <CardTitle className="text-sm font-semibold">This Week</CardTitle>

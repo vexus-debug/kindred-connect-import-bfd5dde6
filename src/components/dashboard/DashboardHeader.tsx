@@ -6,7 +6,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, User, Settings, LogOut, ChevronDown, Command, ChevronRight, Search, Bot, Menu } from "lucide-react";
+import { Bell, User, Settings, LogOut, ChevronDown, Command, ChevronRight, Search, Stethoscope, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrg } from "@/hooks/useOrg";
@@ -119,7 +119,7 @@ export function DashboardHeader({ onToggleAI, aiOpen }: DashboardHeaderProps = {
             onClick={onToggleAI}
             title="AI Assistant"
           >
-            <Bot className="h-4 w-4" />
+            <Stethoscope className="h-4 w-4" />
           </Button>
         )}
 

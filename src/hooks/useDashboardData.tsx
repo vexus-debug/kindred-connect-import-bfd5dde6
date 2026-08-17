@@ -172,3 +172,57 @@ export function useCurrentUserName() {
     enabled: true,
   });
 }
+
+const DIST_COLORS = [
+  "hsl(var(--primary))",
+  "hsl(var(--dental-teal-light))",
+  "hsl(var(--gold))",
+  "hsl(var(--slate))",
+  "hsl(var(--info))",
+];
+
+/** Real treatment distribution over the last 90 days of appointments. */
+export function useTreatmentDistribution() {
+  const { currentOrg } = useOrg();
+  const orgId = currentOrg?.org_id;
+
+  return useQuery({
+    queryKey: ["treatment-distribution", orgId],
+    enabled: !!orgId,
+    queryFn: async () => {
+      const since = format(subMonths(new Date(), 3), "yyyy-MM-dd");
+
+      const { data, error } = await supabase
+        .from("appointments")
+        .select("treatment_id, treatments(name)")
+        .eq("org_id", orgId!)
+        .gte("appointment_date", since)
+        .not("treatment_id", "is", null);
+
+      if (error) throw error;
+
+      const counts: Record<string, number> = {};
+      let total = 0;
+      (data || []).forEach((row: any) => {
+        const name = row.treatments?.name;
+        if (!name) return;
+        counts[name] = (counts[name] || 0) + 1;
+        total++;
+      });
+
+      if (total === 0) return [];
+
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const top = sorted.slice(0, 4);
+      const restCount = sorted.slice(4).reduce((sum, [, c]) => sum + c, 0);
+      const entries = restCount > 0 ? [...top, ["Other", restCount] as [string, number]] : top;
+
+      return entries.map(([name, count], i) => ({
+        name,
+        count,
+        value: Math.round((count / total) * 100),
+        fill: DIST_COLORS[i % DIST_COLORS.length],
+      }));
+    },
+  });
+}
