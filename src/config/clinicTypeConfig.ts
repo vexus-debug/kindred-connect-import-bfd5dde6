@@ -3,7 +3,7 @@ import {
   UserCog, Package, BarChart3, Bell, Settings, GraduationCap, Microscope,
   ClipboardList, DollarSign, Wrench, MessageSquare, Star, Receipt, Shield,
   FileCheck, FolderOpen, Eye, Heart, Baby, Bone, Ear, Wallet, FileText,
-  PiggyBank, TrendingUp, Calculator, Bot, Clock, CalendarClock, Truck,
+  PiggyBank, TrendingUp, Calculator, Clock, CalendarClock, Truck,
   ShoppingCart, Link2, LineChart, Globe,
 } from "lucide-react";
 
