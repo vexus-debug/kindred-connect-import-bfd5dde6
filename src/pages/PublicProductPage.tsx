@@ -19,6 +19,7 @@ export default function PublicProductPage() {
   const { slug, productId } = useParams<{ slug: string; productId: string }>();
   const { data: product, isLoading } = usePublicShopProduct(productId);
   const [qty, setQty] = useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [ordered, setOrdered] = useState(false);
   const [ordering, setOrdering] = useState(false);
