@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import {
   useDashboardStats, useWeeklyAppointments, useRevenueData,
-  useTodaySchedule, useRecentActivity, useCurrentUserName,
+  useTodaySchedule, useRecentActivity, useCurrentUserName, useTreatmentDistribution,
 } from "@/hooks/useDashboardData";
 import { format } from "date-fns";
 import { useOrg } from "@/hooks/useOrg";
@@ -116,6 +116,7 @@ export default function DashboardHome() {
   const { data: todayAppointments } = useTodaySchedule();
   const { data: activities } = useRecentActivity();
   const { data: userName } = useCurrentUserName();
+  const { data: treatmentDist, isLoading: treatmentDistLoading } = useTreatmentDistribution();
   const { currentOrg, basePath } = useOrg();
   const orgRole = currentOrg?.role || "receptionist";
 
@@ -133,15 +134,6 @@ export default function DashboardHome() {
     canSeeAppointments && { to: `${basePath}/appointments`, icon: CalendarPlus, title: "Book Appointment" },
     canSeeBilling     && { to: `${basePath}/billing`,      icon: FileText,    title: "Create Invoice" },
   ].filter(Boolean) as any[];
-
-  /* Treatment distribution */
-  const treatmentPie = [
-    { name: "Check-up", value: 30, fill: "hsl(var(--primary))" },
-    { name: "Filling",  value: 22, fill: "hsl(var(--dental-teal-light))" },
-    { name: "Cleaning", value: 18, fill: "hsl(var(--gold))" },
-    { name: "Extraction", value: 14, fill: "hsl(var(--slate))" },
-    { name: "Other",    value: 16, fill: "hsl(var(--info))" },
-  ];
 
   return (
     <div className="space-y-5">
@@ -366,11 +358,30 @@ export default function DashboardHome() {
                 </div>
               </CardHeader>
               <CardContent className="pt-0 space-y-3.5">
-                {treatmentPie.map((item) => (
+                {treatmentDistLoading ? (
+                  <div className="space-y-3.5">
+                    {[0, 1, 2, 3].map((i) => (
+                      <div key={i} className="space-y-1.5">
+                        <div className="h-3 w-24 bg-muted rounded animate-pulse" />
+                        <div className="h-2 w-full bg-muted rounded-full animate-pulse" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (treatmentDist || []).length === 0 ? (
+                  <div className="flex flex-col items-center gap-2 py-10 text-center">
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                      <BarChart3 className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <p className="text-sm text-muted-foreground">No treatment data yet</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      Distribution appears once appointments are linked to treatments.
+                    </p>
+                  </div>
+                ) : (treatmentDist || []).map((item) => (
                   <div key={item.name} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-medium text-foreground">{item.name}</span>
-                      <span className="font-bold text-foreground tabular-nums">{item.value}%</span>
+                      <span className="font-bold text-foreground tabular-nums">{item.value}% <span className="font-medium text-muted-foreground">({item.count})</span></span>
                     </div>
                     <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                       <motion.div
