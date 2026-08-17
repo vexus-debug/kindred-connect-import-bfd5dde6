@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
   Users, CalendarDays, CreditCard, TrendingUp, UserPlus, CalendarPlus, FileText,
-  Clock, Activity, ArrowUpRight, ArrowDownRight, Zap, ChevronRight, Sparkles,
+  Clock, Activity, ArrowUpRight, ArrowDownRight, Zap, ChevronRight, Stethoscope, CalendarCheck,
   CircleDot, BarChart3,
 } from "lucide-react";
 import {
@@ -156,7 +156,7 @@ export default function DashboardHome() {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-primary to-dental-teal-light flex items-center justify-center shadow-md shadow-primary/20">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
+                <Stethoscope className="h-4 w-4 text-primary-foreground" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-foreground tracking-tight leading-tight">
@@ -482,7 +482,7 @@ export default function DashboardHome() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Zap className="h-4 w-4 text-primary" />
+                      <CalendarCheck className="h-4 w-4 text-primary" />
                     </div>
                     <div>
                       <CardTitle className="text-sm font-semibold">This Week</CardTitle>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, X, Trash2, Loader2, Bot, Sparkles, Plus, MessageSquare, Mic, MicOff, Check, RotateCcw, ImagePlus, XCircle } from "lucide-react";
+import { Send, X, Trash2, Loader2, Stethoscope, ClipboardPlus, Plus, MessageSquare, Mic, MicOff, Check, RotateCcw, ImagePlus, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -361,7 +361,7 @@ export function AICopilotPanel({ open, onClose, inline = false }: AICopilotPanel
       <div className="flex items-center gap-3">
         <div className="relative">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/20">
-            <Bot className="w-5 h-5 text-primary-foreground" />
+            <Stethoscope className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background bg-emerald-500" />
         </div>
@@ -438,7 +438,7 @@ export function AICopilotPanel({ open, onClose, inline = false }: AICopilotPanel
             transition={{ delay: 0.15, type: "spring", stiffness: 300 }}
             className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/10"
           >
-            <Sparkles className="w-9 h-9 text-primary" />
+            <ClipboardPlus className="w-9 h-9 text-primary" />
           </motion.div>
           <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.25 }} className="text-center space-y-2">
             <p className="font-semibold text-lg">How can I help?</p>
@@ -473,7 +473,7 @@ export function AICopilotPanel({ open, onClose, inline = false }: AICopilotPanel
         >
           {msg.role === "assistant" && (
             <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-              <Bot className="w-3.5 h-3.5 text-primary" />
+              <Stethoscope className="w-3.5 h-3.5 text-primary" />
             </div>
           )}
           <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${msg.role === "user" ? "bg-primary text-primary-foreground rounded-br-md shadow-sm" : "bg-muted/70 rounded-bl-md border border-border/30"}`}>
@@ -497,7 +497,7 @@ export function AICopilotPanel({ open, onClose, inline = false }: AICopilotPanel
       {isLoading && (
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-2">
           <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <Bot className="w-3.5 h-3.5 text-primary" />
+            <Stethoscope className="w-3.5 h-3.5 text-primary" />
           </div>
           <div className="bg-muted/70 rounded-2xl rounded-bl-md border border-border/30 px-4 py-3 flex items-center gap-2.5">
             <div className="flex gap-1">
